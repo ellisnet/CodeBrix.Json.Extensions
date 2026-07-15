@@ -1,0 +1,21 @@
+THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
+
+CodeBrix.Json.Extensions is a set of managed extensions for the .NET
+System.Text.Json library, providing attribute-driven polymorphic
+deserialization with an optional fallback type. CodeBrix.Json.Extensions does
+not incorporate any third-party source code into its own assemblies. It builds
+only against the .NET base class libraries (System.Text.Json), and adds no
+external NuGet dependencies of its own.
+
+Jeremy Ellis and contributors license the CodeBrix.Json.Extensions project
+to you under the terms set forth in the LICENSE file, which is located at
+the root of this repository.
+
+If you have any questions about any third-party code or services referenced
+here, or if you believe that any third-party code has been included in
+CodeBrix.Json.Extensions in error, please open a new issue at:
+https://github.com/ellisnet/CodeBrix.Json.Extensions/issues
+
+================================================================================
+
+END OF THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
