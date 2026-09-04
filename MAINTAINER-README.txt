@@ -21,7 +21,18 @@ types in total. There are no sibling packages and no native assets.
 REPOSITORY LAYOUT
 =================
 
-    CodeBrix.Json.Extensions.slnx     Solution (Solution Items + Tests folder).
+    CodeBrix.Json.Extensions.slnx     Solution. The "Solution Items" folder
+                                      carries .gitignore, AGENT-README.txt,
+                                      EXTRAS-README.txt, global.json,
+                                      icon-codebrix-128.png, LICENSE,
+                                      MAINTAINER-README.txt, README-INDEX.txt,
+                                      README.md and THIRD-PARTY-NOTICES.txt;
+                                      the "Tests" folder carries the test
+                                      project.
+    global.json                       Selects the Microsoft.Testing.Platform
+                                      test runner. Does NOT pin an SDK
+                                      version. See TESTING below.
+    .gitignore                        Git exclusions for this repository.
     icon-codebrix-128.png             Package icon; packed from the repo root.
     LICENSE                           MIT.
     THIRD-PARTY-NOTICES.txt           Packed into the nupkg. Records that no
@@ -98,6 +109,15 @@ TESTING
 =======
 
     dotnet test CodeBrix.Json.Extensions.slnx
+
+The test runner is Microsoft.Testing.Platform, selected by global.json at the
+repository root:
+
+    { "test": { "runner": "Microsoft.Testing.Platform" } }
+
+That file pins no SDK version, so the newest installed .NET 10 SDK is still
+used. Keep it committed -- without it, `dotnet test` falls back to the older
+VSTest bridge.
 
 xUnit v3 with SilverAssertions (fluent x.Should().Be(y) form). No opt-in
 environment variables, no fixtures, no external tools.
