@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -30,6 +31,7 @@ public class FallbackTypeConverterFactory : JsonConverterFactory
     /// <param name="typeToConvert">The polymorphic base class or interface.</param>
     /// <param name="options">The active serializer options.</param>
     /// <returns>The created converter.</returns>
+    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(FallbackTypeConverter<>))]
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         => (JsonConverter)Activator.CreateInstance(
             typeof(FallbackTypeConverter<>).MakeGenericType(typeToConvert));

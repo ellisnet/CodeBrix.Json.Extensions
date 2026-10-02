@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeBrix.Json.Extensions.Polymorphism;
 
@@ -24,7 +25,7 @@ public sealed class JsonKnownTypeAttribute : Attribute
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="knownType"/> or <paramref name="discriminatorValue"/> is <c>null</c>.
     /// </exception>
-    public JsonKnownTypeAttribute(Type knownType, string discriminatorValue)
+    public JsonKnownTypeAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type knownType, string discriminatorValue)
     {
         KnownType = knownType ?? throw new ArgumentNullException(nameof(knownType));
         DiscriminatorValue = discriminatorValue ?? throw new ArgumentNullException(nameof(discriminatorValue));
@@ -33,6 +34,7 @@ public sealed class JsonKnownTypeAttribute : Attribute
     /// <summary>
     /// The type to deserialize when the discriminator property equals <see cref="DiscriminatorValue"/>.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
     public Type KnownType { get; }
 
     /// <summary>

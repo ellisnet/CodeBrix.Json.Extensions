@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CodeBrix.Json.Extensions.Polymorphism;
 
@@ -23,7 +24,7 @@ public sealed class JsonFallbackTypeAttribute : Attribute
     /// to the attributed base type, and must not be the attributed base type itself.
     /// </param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="fallbackType"/> is <c>null</c>.</exception>
-    public JsonFallbackTypeAttribute(Type fallbackType)
+    public JsonFallbackTypeAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type fallbackType)
     {
         FallbackType = fallbackType ?? throw new ArgumentNullException(nameof(fallbackType));
     }
@@ -31,5 +32,6 @@ public sealed class JsonFallbackTypeAttribute : Attribute
     /// <summary>
     /// The type to deserialize when the discriminator does not match any known type.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
     public Type FallbackType { get; }
 }

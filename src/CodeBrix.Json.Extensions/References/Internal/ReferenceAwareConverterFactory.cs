@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -26,6 +27,7 @@ internal sealed class ReferenceAwareConverterFactory : JsonConverterFactory
         => !typeToConvert.IsValueType
            && Attribute.IsDefined(typeToConvert, typeof(JsonReferenceableAttribute), inherit: false);
 
+    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors, typeof(ReferenceAwareConverter<>))]
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         => (JsonConverter)Activator.CreateInstance(
             typeof(ReferenceAwareConverter<>).MakeGenericType(typeToConvert),

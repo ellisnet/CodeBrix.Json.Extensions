@@ -54,6 +54,32 @@ CodeBrix.Json.Extensions.
 
 ================================================================================
 
+ANDROID AND TRIMMING
+====================
+ReferenceJson and ReferenceByIdJson explicitly configure their own metadata
+resolver. They do not require enabling JsonSerializerIsReflectionEnabledByDefault
+for the whole application. Caller-supplied resolvers are honored, without adding
+an implicit reflection fallback to them. Options are copied, not mutated.
+
+Full trimming can still remove YOUR model constructors, properties and fields.
+Preserve the entire model graph, including nested and runtime-derived types, or
+provide a metadata-mode JsonSerializerContext through options.TypeInfoResolver.
+ReferenceJson supports generated metadata for $id/$ref contracts; include every
+runtime type and collection used in the graph. The by-id modifier inspects member
+attributes through JsonPropertyInfo.AttributeProvider; generated contracts that
+omit those attributes need an explicit metadata customization or preserved
+reflection contracts. Supplying a context alone does not make every feature AOT-safe.
+
+Polymorphism used through plain JsonSerializer still needs explicit options with
+a resolver when the application's global reflection default is disabled. The
+library preserves its dynamically constructed converter constructors, and known/
+fallback type attributes request preservation of their target type's members.
+That does not automatically preserve every nested application model.
+
+Partial trimming is the simpler option when model preservation has not been
+verified. Test full-trimmed Release builds on the actual target architectures;
+trimming warnings remain relevant. This package does not claim NativeAOT support.
+
 KEY NAMESPACES / USINGS
 =======================
 The public API lives in two feature namespaces; the root CodeBrix.Json.Extensions
@@ -736,10 +762,10 @@ WHAT THIS PACKAGE DOES NOT DO
     mix the two on one type.
   - It does NOT write the discriminator value for you on serialize - the
     discriminator is your own model property.
-  - It does NOT provide a source-generated JsonSerializerContext, and its
-    reference paths fall back to the reflection-based DefaultJsonTypeInfoResolver
-    when you supply no resolver. Treat it as a reflection-based library; it is
-    not designed for trimmed / AOT-only applications.
+  - It does NOT generate contracts for application models or guarantee NativeAOT
+    support. Its default reference paths use reflection; full-trimmed consumers
+    must preserve their model members or supply suitable metadata (see ANDROID
+    AND TRIMMING). Runtime generic converter creation still requires reflection.
   - It does NOT defer unresolved by-id references automatically; deferral is a
     call you make on JsonReferenceRegistry.
   - It does NOT make Feature A and Feature B interchangeable inside one member:

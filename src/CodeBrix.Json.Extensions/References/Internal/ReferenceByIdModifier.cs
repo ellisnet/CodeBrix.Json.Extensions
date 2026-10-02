@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -13,6 +14,7 @@ namespace CodeBrix.Json.Extensions.References.Internal;
 /// </summary>
 internal static class ReferenceByIdModifier
 {
+    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors, typeof(JsonReferenceByIdConverter<,>))]
     internal static Action<JsonTypeInfo> Create(JsonReferenceRegistry registry)
         => typeInfo =>
         {

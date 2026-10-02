@@ -122,6 +122,9 @@ public static class ReferenceJson
             ? new JsonSerializerOptions()
             : new JsonSerializerOptions(baseOptions);
 
+        // Set the resolver explicitly: full trimming disables STJ's implicit reflection default.
+        // Reuse the caller's resolver when supplied, including source-generated metadata.
+        operation.TypeInfoResolver = metadataOptions.TypeInfoResolver;
         operation.Converters.Add(new ReferenceAwareConverterFactory(scope, metadataOptions));
 
         return operation;
