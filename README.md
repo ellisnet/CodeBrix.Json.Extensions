@@ -48,7 +48,6 @@ using CodeBrix.Json.Extensions.Polymorphism;
 [JsonConverter(typeof(FallbackTypeConverterFactory))]
 [JsonDiscriminator("type")]
 [JsonKnownType(typeof(Circle), "circle")]
-[JsonKnownType(typeof(Square), "square")]
 [JsonFallbackType(typeof(UnknownShape))]
 public interface IShape
 {
@@ -107,6 +106,7 @@ both referenceable and discriminated.
 ### Serialize a shared entity by its identifier (`CodeBrix.Json.Extensions.References`)
 
 ```csharp
+using System.Text.Json.Serialization;
 using CodeBrix.Json.Extensions.References;
 
 public class Scene : IJsonReferenceable<string>

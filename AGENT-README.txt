@@ -287,7 +287,9 @@ ERROR MODEL
                               is not assignable, is declared twice, or is
                               abstract/an interface without its own discriminator.
   - ArgumentNullException     A required argument (inputType, returnType,
-                              registry, entity, type, apply) is null.
+                              registry, entity, type, apply, or the
+                              knownType / discriminatorValue / fallbackType
+                              attribute argument) is null.
   - ArgumentException         A [JsonDiscriminator] property name is
                               null/empty/whitespace; or an entity registered with
                               JsonReferenceRegistry does not implement
@@ -669,8 +671,9 @@ PERFORMANCE TIPS
 
 6. JsonReferenceRegistry.TryResolve is O(1) for an exact (type, id) hit and falls
    back to a linear scan when the requested type is a base type of the registered
-   one. Register entities under the type you will reference them as when a
-   registry gets large.
+   one. Register always keys an entity by its runtime type, so when a registry
+   gets large, declare [JsonReferenceById] members with the entities' concrete
+   runtime type rather than a base type or interface.
 
 7. Types that use none of these attributes pay nothing: the converters' CanConvert
    checks are attribute lookups, and plain JsonSerializer paths are untouched.
@@ -820,6 +823,10 @@ relevant test file:
   Feature B write/read, two-phase apply, deferred fixups, registry validation:
     -> https://github.com/ellisnet/CodeBrix.Json.Extensions/blob/main/tests/CodeBrix.Json.Extensions.Tests/ReferenceByIdJsonTests.cs
 
+  Caller-supplied metadata resolvers (a source-generated JsonSerializerContext
+  with ReferenceJson; options left unmutated; resolver not replaced):
+    -> https://github.com/ellisnet/CodeBrix.Json.Extensions/blob/main/tests/CodeBrix.Json.Extensions.Tests/ResolverTests.cs
+
 HOW TO USE: to fetch the raw text of any file above, replace
 "https://github.com/ellisnet/CodeBrix.Json.Extensions/blob/main/" with
 "https://raw.githubusercontent.com/ellisnet/CodeBrix.Json.Extensions/main/".
@@ -874,7 +881,7 @@ Read order                                 register targets, THEN deserialize
 JsonException               shape/dispatch/reference-resolution failures
 InvalidOperationException   invalid polymorphic configuration
 ArgumentNullException       null inputType / returnType / registry / entity /
-                            type / apply
+                            type / apply / attribute type or value argument
 ArgumentException           empty discriminator name; entity without
                             IJsonReferenceable<TId>
 
